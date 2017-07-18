@@ -1,4 +1,4 @@
-console.log('this is loaded');
+console.log('How can I serve you today, your royal highness?');
 
 exports.twitterKeys = {
   consumer_key: 'wGMO9j0cVb2c8Ss6reQW8geQW',

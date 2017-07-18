@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/Superunknown1103/liri-node-app/issues"
   },
-  "homepage": "https://github.com/Superunknown1103/liri-node-app#readme"
+  "homepage": "https://github.com/Superunknown1103/liri-node-app#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "jslint": "^0.10.3",
+    "request": "^2.81.0",
+    "twitter": "^1.7.1"
+  }
 }
