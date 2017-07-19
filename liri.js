@@ -2,8 +2,8 @@
 var birdKeys = require('./keys.js');
 var fs = require('fs');
 var twitter = require('twitter');
-// var spotify = require('spotify');
-// var request = require('request');
+var Spotify = require('node-spotify-api');
+var request = require('request');
 
 console.log("\nINSTRUCTIONS:\n Enter one of the following commands: \n\n USER'S LAST 20 TWEETS: node liri.js my-tweets 'twitter handle'\n SONG INFO: node liri.js spotify-this-song 'song name'\n MOVIE INFO: node liri.js movie-this 'movie name'\n RUN A COMMAND FROM A TEXT FILE: node liri.js do-what-it-says\n");
 
@@ -17,6 +17,50 @@ var writeToLog = function(data) {
 		console.log("log.txt was updated!");
 	});
 };
+
+var Spotify = require('node-spotify-api');
+ 
+var searchSpotify = function(songName) {
+        var spotify = new Spotify({
+        id: 'e9c3df3e5d2b42c78016c53c9c93e01a',
+        secret: '764134bf544444fb8bf178b3e7dff1e9'
+        });
+      
+        const getArtistNames = function(artist){
+            return artist.name;
+        };
+        const songname = process.argv[3];
+        spotify.search({ type: 'track', query: songname , limit: 5 }, function(err, data) {
+        if (err) {
+            return console.log('Error occurred: ' + err);
+        }
+        var songs = data.tracks.items;
+        var data = []; //empty array to hold data
+        for (var i = 0; i < songs.length; i++) {
+            data.push({
+                'artist(s)': songs[i].artists.map(getArtistNames),
+                'song name: ': songs[i].name,
+                'preview song: ': songs[i].preview_url,
+                'album: ': songs[i].album.name,
+             });
+        }
+        console.log(data); 
+        });
+};
+
+const choice = function(caseData, functionData) {
+    switch (caseData) {
+        case 'spotify-this-song':
+        searchSpotify();
+        break;
+    default:
+    console.log('LIRI doesn\'t know that');
+    }
+}
+const spotifyRun = function(argOne, argTwo) {
+    choice(argOne, argTwo);
+};
+spotifyRun(process.argv[2], process.argv[3]);
 
 var getTweets = function() {
 
@@ -51,6 +95,10 @@ var pick = function(caseData, functionData) {
 		case 'my-tweets':
 		getTweets();
 		break;
+		case 'spotify-this-song':
+      	searchSpotify();
+      break;
+
 	default:
 	console.log('LIRI doesn\'t know that');
 	}
