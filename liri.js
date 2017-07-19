@@ -4,6 +4,7 @@ var fs = require('fs');
 var twitter = require('twitter');
 var Spotify = require('node-spotify-api');
 var request = require('request');
+var omdb = require('omdb');
 
 console.log("\nINSTRUCTIONS:\n Enter one of the following commands: \n\n USER'S LAST 20 TWEETS: node liri.js my-tweets 'twitter handle'\n SONG INFO: node liri.js spotify-this-song 'song name'\n MOVIE INFO: node liri.js movie-this 'movie name'\n RUN A COMMAND FROM A TEXT FILE: node liri.js do-what-it-says\n");
 
@@ -57,8 +58,10 @@ const choice = function(caseData, functionData) {
     console.log('LIRI doesn\'t know that');
     }
 }
+
 const spotifyRun = function(argOne, argTwo) {
     choice(argOne, argTwo);
+    
 };
 spotifyRun(process.argv[2], process.argv[3]);
 
@@ -83,11 +86,60 @@ var client = new twitter({
                    'Tweets: ' : tweets[i].text,
                });
            };
+
 };
       console.log(data);
       writeToLog(data);
   	});
   };
+
+
+var getMeMovie = function(movieName) {
+
+  if (movieName === undefined) {
+    movieName = 'Mr Nobody';
+  }
+
+  var urlHit = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
+
+  request(urlHit, function(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var data = [];
+      var jsonData = JSON.parse(body);
+
+      data.push({
+      'Title: ' : jsonData.Title,
+      'Year: ' : jsonData.Year,
+      'Rated: ' : jsonData.Rated,
+      'IMDB Rating: ' : jsonData.imdbRating,
+      'Country: ' : jsonData.Country,
+      'Language: ' : jsonData.Language,
+      'Plot: ' : jsonData.Plot,
+      'Actors: ' : jsonData.Actors,
+      'Rotten Tomatoes Rating: ' : jsonData.tomatoRating,
+      'Rotton Tomatoes URL: ' : jsonData.tomatoURL,
+  });
+      console.log(data);
+      writeToLog(data);
+}
+  });
+  const choice = function(caseData, functionData) {
+    switch (caseData) {
+        case 'movie-this':
+        getMeMovie(functionData);
+        break;
+    default:
+    console.log('LIRI doesn\'t know that');
+    }
+}
+
+const movieRun = function(argOne, argTwo) {
+    choice(argOne, argTwo);
+    
+};
+movieRun(process.argv[2], process.argv[3]);
+
+}
 
 
 var pick = function(caseData, functionData) {
