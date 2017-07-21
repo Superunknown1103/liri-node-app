@@ -4,7 +4,6 @@ var fs = require('fs');
 var twitter = require('twitter');
 var Spotify = require('node-spotify-api');
 var request = require('request');
-var omdb = require('omdb');
 
 console.log("\nINSTRUCTIONS:\n Enter one of the following commands: \n\n USER'S LAST 20 TWEETS: node liri.js my-tweets 'twitter handle'\n SONG INFO: node liri.js spotify-this-song 'song name'\n MOVIE INFO: node liri.js movie-this 'movie name'\n RUN A COMMAND FROM A TEXT FILE: node liri.js do-what-it-says\n");
 
@@ -18,8 +17,6 @@ var writeToLog = function(data) {
 		console.log("log.txt was updated!");
 	});
 };
-
-var Spotify = require('node-spotify-api');
  
 var searchSpotify = function(songName) {
         var spotify = new Spotify({
@@ -48,22 +45,6 @@ var searchSpotify = function(songName) {
         console.log(data); 
         });
 };
-
-const choice = function(caseData, functionData) {
-    switch (caseData) {
-        case 'spotify-this-song':
-        searchSpotify();
-        break;
-    default:
-    console.log('LIRI doesn\'t know that');
-    }
-}
-
-const spotifyRun = function(argOne, argTwo) {
-    choice(argOne, argTwo);
-    
-};
-spotifyRun(process.argv[2], process.argv[3]);
 
 var getTweets = function() {
 
@@ -94,16 +75,17 @@ var client = new twitter({
   };
 
 
-var getMeMovie = function(movieName) {
+var getMeMovie = function(movieName){
 
   if (movieName === undefined) {
     movieName = 'Mr Nobody';
   }
 
   var urlHit = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
+  console.log(urlHit);
 
   request(urlHit, function(error, response, body) {
-    if (!error && response.statusCode == 200) {
+    if (!error && response.statusCode === 200) {
       var data = [];
       var jsonData = JSON.parse(body);
 
@@ -119,28 +101,11 @@ var getMeMovie = function(movieName) {
       'Rotten Tomatoes Rating: ' : jsonData.tomatoRating,
       'Rotton Tomatoes URL: ' : jsonData.tomatoURL,
   });
-      console.log(data);
+      console.log(data)
       writeToLog(data);
 }
   });
-  const choice = function(caseData, functionData) {
-    switch (caseData) {
-        case 'movie-this':
-        getMeMovie(functionData);
-        break;
-    default:
-    console.log('LIRI doesn\'t know that');
-    }
 }
-
-const movieRun = function(argOne, argTwo) {
-    choice(argOne, argTwo);
-    
-};
-movieRun(process.argv[2], process.argv[3]);
-
-}
-
 
 var pick = function(caseData, functionData) {
 	switch (caseData) {
@@ -149,7 +114,10 @@ var pick = function(caseData, functionData) {
 		break;
 		case 'spotify-this-song':
       	searchSpotify();
-      break;
+      	break;
+      	case 'movie-this':
+        getMeMovie(functionData);
+        break;
 
 	default:
 	console.log('LIRI doesn\'t know that');
