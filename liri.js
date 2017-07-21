@@ -107,6 +107,17 @@ var getMeMovie = function(movieName){
   });
 }
 
+var doWhatItSays = function() {
+  fs.readFile("random.txt", "utf8", function(err, data) {
+    if (err) throw err;
+    let split = data.split(',');
+    process.argv[3] = split[1]
+    pick(split[0])
+
+  });
+}
+
+
 var pick = function(caseData, functionData) {
 	switch (caseData) {
 		case 'my-tweets':
@@ -117,6 +128,9 @@ var pick = function(caseData, functionData) {
       	break;
       	case 'movie-this':
         getMeMovie(functionData);
+        break;
+        case 'do-what-it-says':
+        doWhatItSays();
         break;
 
 	default:
