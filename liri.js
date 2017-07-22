@@ -111,8 +111,9 @@ var doWhatItSays = function() {
   fs.readFile("random.txt", "utf8", function(err, data) {
     if (err) throw err;
     let split = data.split(',');
-    process.argv[3] = split[1]
-    pick(split[0])
+    process.argv[3] = split[1];
+    pick(split[0]);
+    console.log(data);
 
   });
 }
